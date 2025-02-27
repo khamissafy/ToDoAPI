@@ -39,7 +39,8 @@ To access protected endpoints, you need an authentication token. Obtain a token 
   ```json
   {
     "username": "your_username",
-    "password": "your_password"
+    "password": "your_password",
+    "rememberMe": <boolean, if you need a refresh token>
   }
   ```
 - **Response:**
