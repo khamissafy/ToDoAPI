@@ -38,8 +38,8 @@ To access protected endpoints, you need an authentication token. Obtain a token 
 - **Request Body:**
   ```json
   {
-    "username": "your_username",
-    "password": "your_password",
+    "username": "admin@admin.com",
+    "password": "Mm123456",
     "rememberMe": <boolean, if you need a refresh token>
   }
   ```
