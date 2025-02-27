@@ -121,6 +121,8 @@ Authorization: Bearer your_access_token
 
 1. Implement localization for error messages and UI text.
 2. Apply additional security enhancements.
+3. Use Redis for caching.
+4. Use RabbitMQ or Kafka for send messaging queue for send Email notifications and so on.
 
 ---
 
