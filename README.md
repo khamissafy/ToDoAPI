@@ -1,158 +1,133 @@
-```markdown
-# ToDoList API
-
-This is a simple ToDo list API built using ASP.NET Core. The project includes user authentication, activity logging, and CRUD operations for managing ToDo items. The API also includes validation, and it is designed for development purposes.
+# ToDoListAPI
 
 ## Installation
 
-To install the app, follow these steps:
+Follow these steps to install and run the application:
 
-1. **Clone the repository:**
-
-   ```bash
+1. Clone the repository:
+   ```sh
    git clone <repo-url>
+   cd ToDoListAPI
    ```
-
-2. **Configure the connection string:**
-
-   - Open the `appsettings.Debug.json` file and update the connection string to point to your local SQL Server instance.
-
-3. **Install project dependencies:**
-
-   Make sure all project dependencies are installed by running:
-
-   ```bash
+2. Update the database connection string in `appsettings.Debug.json`:
+   ```json
+   "ConnectionStrings": {
+       "DefaultConnection": "Your_Local_DB_Connection_String"
+   }
+   ```
+3. Ensure all dependencies are installed:
+   ```sh
    dotnet restore
    ```
-
-4. **Run the application:**
-
-   After configuring the connection string and installing the dependencies, simply run the app using:
-
-   ```bash
+4. Run the application:
+   ```sh
    dotnet run
    ```
-
-   The app will create the database, the necessary tables, and seed the required data automatically.
+   This will automatically create the database, tables, and seed the required data.
 
 ---
 
-## Usage
+## API Usage
 
-Below are the available API endpoints, their descriptions, and how to use them.
+### Authentication
 
-### User Endpoints
+To access protected endpoints, you need an authentication token. Obtain a token using the login endpoint:
 
-1. **Login** (`POST /api/Users/login`)
+#### **Login**
+- **Endpoint:** `POST /api/Users/login`
+- **Request Body:**
+  ```json
+  {
+    "username": "your_username",
+    "password": "your_password"
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "data": {
+      "token": "your_access_token"
+    }
+  }
+  ```
+- **Requires Authentication?** No
 
-   - **Description**: Authenticates the user and returns a token if successful.
-   - **Body**:
-     ```json
-     {
-       "username": "string",
-       "password": "string"
-     }
-     ```
-   - **Response**:
-     - Returns a token if the credentials are valid.
-     - On failure, returns a 403 status with an error message.
-   - **Authentication**: Not required to access this endpoint.
+Use the returned token for authentication in other endpoints by including it in the `Authorization` header:
+```sh
+Authorization: Bearer your_access_token
+```
 
-2. **Get User Logs** (`GET /api/Users/logs`)
+### User Management
 
-   - **Description**: Retrieves all user activity logs.
-   - **Query Parameters**: Filters like date range or user ID can be added in the query string.
-   - **Response**:
-     - Returns a list of logs with pagination.
-     - On failure, returns a bad request with an error message.
-   - **Authentication**: Requires valid authentication token.
+#### **Get User Logs**
+- **Endpoint:** `GET /api/Users/logs`
+- **Query Parameters:**
+  ```json
+  {
+    "page": 1,
+    "pageSize": 10
+  }
+  ```
+- **Requires Authentication?** Yes
 
-### ToDo Endpoints
+### To-Do List Management
 
-1. **Get All ToDos** (`GET /api/ToDo`)
+#### **Get To-Do Items**
+- **Endpoint:** `GET /api/ToDo`
+- **Query Parameters:**
+  ```json
+  {
+    "page": 1,
+    "pageSize": 10
+  }
+  ```
+- **Requires Authentication?** Yes
 
-   - **Description**: Retrieves all ToDo items with optional query filters.
-   - **Query Parameters**: You can filter the results using parameters like `status`, `dueDate`, etc.
-   - **Response**:
-     - Returns a list of ToDo items.
-     - On failure, returns a bad request with an error message.
-   - **Authentication**: Requires a valid authentication token.
+#### **Get To-Do Item By ID**
+- **Endpoint:** `GET /api/ToDo/{id}`
+- **Requires Authentication?** Yes
 
-2. **Get ToDo by ID** (`GET /api/ToDo/{id}`)
+#### **Create a To-Do Item**
+- **Endpoint:** `POST /api/ToDo`
+- **Request Body:**
+  ```json
+  {
+    "title": "New Task",
+    "description": "Task details"
+  }
+  ```
+- **Requires Authentication?** Yes
 
-   - **Description**: Retrieves a single ToDo item by its ID.
-   - **Response**:
-     - Returns the details of the specified ToDo item.
-     - On failure, returns a 404 with an error message if the item is not found.
-   - **Authentication**: Requires a valid authentication token.
+#### **Update a To-Do Item**
+- **Endpoint:** `PUT /api/ToDo/{id}`
+- **Request Body:**
+  ```json
+  {
+    "title": "Updated Task",
+    "description": "Updated details"
+    "isCompleted": true
+  }
+  ```
+- **Requires Authentication?** Yes
 
-3. **Create ToDo** (`POST /api/ToDo`)
-
-   - **Description**: Creates a new ToDo item.
-   - **Body**:
-     ```json
-     {
-       "title": "string",
-       "description": "string",
-       "dueDate": "date",
-       "priority": "int"
-     }
-     ```
-   - **Response**:
-     - Returns no content (`204`) on success.
-     - On failure, returns a bad request with an error message.
-   - **Authentication**: Requires a valid authentication token.
-
-4. **Update ToDo** (`PUT /api/ToDo/{id}`)
-
-   - **Description**: Updates an existing ToDo item.
-   - **Body**:
-     ```json
-     {
-       "title": "string",
-       "description": "string",
-       "dueDate": "date",
-       "priority": "int"
-     }
-     ```
-   - **Response**:
-     - Returns no content (`204`) on success.
-     - On failure, returns a bad request with an error message.
-   - **Authentication**: Requires a valid authentication token.
-
-5. **Delete ToDo** (`DELETE /api/ToDo/{id}`)
-
-   - **Description**: Soft deletes a ToDo item by its ID.
-   - **Response**:
-     - Returns no content (`204`) on success.
-     - On failure, returns a bad request with an error message.
-   - **Authentication**: Requires a valid authentication token.
+#### **Delete a To-Do Item**
+- **Endpoint:** `DELETE /api/ToDo/{id}`
+- **Requires Authentication?** Yes
 
 ---
 
 ## Future Enhancements
 
-1. **Localization**: 
-   - Implement localization for error messages and other UI components to support multiple languages.
-
-2. **Security Enhancements**:
-   - Improve security by implementing additional authentication measures such as OAuth, API rate limiting, and advanced logging for security breaches.
+1. Implement localization for error messages and UI text.
+2. Apply additional security enhancements.
 
 ---
 
 ## Notes
 
-1. This project was developed within a 3-hour time frame as a test application. Only happy path scenarios were tested for the endpoints, but the necessary validations are applied to ensure proper behavior.
-   
-2. The application is deployed using Docker Compose on a Linux server, along with the database. You can explore the API using the Swagger UI at:
+1. **Development Time:** This project was built in under 3 hours, and only happy path testing was performed. However, all necessary validations have been applied.
+2. **Deployment:** The app is deployed using Docker Compose on a Linux server along with the database.
+3. **Access:** You can explore the API documentation at:
+   [Swagger UI](http://164.68.96.165:5001/swagger)
+4. **Security:** The server exposes its IP address because it is a development server, not intended for production use.
 
-   [http://164.68.96.165:5001/swagger](http://164.68.96.165:5001/swagger)
-
-3. The server IP is exposed since this is a development server, not intended for production environments.
-
----
-
-Feel free to contribute or reach out with questions or suggestions!
-```
-
-This `README.md` provides a clear guide on installation, usage, future enhancements, and some project notes. Let me know if you need any modifications!
