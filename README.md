@@ -128,9 +128,10 @@ Authorization: Bearer your_access_token
 
 ## Notes
 
-1. **Development Time:** This project was built in under 3 hours, and only happy path testing was performed. However, all necessary validations have been applied.
-2. **Deployment:** The app is deployed using Docker Compose on a Linux server along with the database.
-3. **Access:** You can explore the API documentation at:
+1. **Development:** I have applied the Caching on "GET /api/todo/{id}" because in the "GET /api/todo" there is a pagination, and caching will not be efficient in this case.
+2. **Development Time:** This project was built in under 3 hours, and only happy path testing was performed. However, all necessary validations have been applied.
+3. **Deployment:** The app is deployed using Docker Compose on a Linux server along with the database.
+4. **Access:** You can explore the API documentation at:
    [Swagger UI](http://164.68.96.165:5001/swagger)
-4. **Security:** The server exposes its IP address because it is a development server, not intended for production use.
+5. **Security:** The server exposes its IP address because it is a development server, not intended for production use.
 
